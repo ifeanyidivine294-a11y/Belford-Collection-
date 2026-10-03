@@ -1,0 +1,6 @@
+{
+  "name": "Belford Collection | Premium Nigerian Fashion & Lifestyle",
+  "description": "Discover premium men's and women's fashion, native wear, footwear, accessories, beauty and custom-made fashion from Belford Collection.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
