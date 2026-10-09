@@ -83,8 +83,8 @@ export const IMAGE_CONFIG = {
   // Beauty & Makeup (Section 33)
   makeup: "https://postimg.cc/TKRhH1d8",
   lipProducts: "https://postimg.cc/tsX7mJXM",
-  foundation: "https://postimg.cc/bGR9PpML", // Updated per request
-  powder: "https://postimg.cc/rD8zYsV2",
+  foundation: "https://postimg.cc/yDVWrxVM", // Updated per request
+  powder: "https://i.postimg.cc/BvrYxvCW/Gemini-Generated-Image-wrp90uwrp90uwrp9.jpg", // Updated per request
   eyelashes: "https://postimg.cc/rD8zYsV2", // Exactly preserved per prompt
   beautyAccessories: "https://postimg.cc/9DWzN0mm"
 } as const;
