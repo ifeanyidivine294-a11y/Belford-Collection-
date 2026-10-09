@@ -51,18 +51,17 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
         </button>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-          {/* Left Column: Product Image Gallery with Zoom (Instruction 1 & 9) */}
+          {/* Left Column: Product Image Gallery with Zoom (Full width edge-to-edge) */}
           <div className="space-y-4">
-            <div className="relative aspect-[3/4] sm:aspect-[2/3] max-h-[640px] bg-[#F8FAFC] border border-[#C9D2E3]/60 rounded-sm overflow-hidden shadow-md flex items-center justify-center p-4">
+            <div className="relative w-full block overflow-hidden rounded-sm shadow-md">
               <BelfordImage
                 src={product.image}
                 alt={product.name}
-                objectFit="contain"
-                className="w-full h-full object-contain object-center"
+                className="w-full h-auto block"
                 allowZoom={true}
                 onZoom={onOpenLightbox}
               />
-              <div className="absolute top-4 left-4 bg-[#071A3D] text-white text-[11px] font-semibold uppercase tracking-wider px-3 py-1 rounded-sm shadow-xs">
+              <div className="absolute top-4 left-4 bg-[#071A3D] text-white text-[11px] font-semibold uppercase tracking-wider px-3 py-1 rounded-sm shadow-xs pointer-events-none">
                 {product.inStock ? 'Available' : 'Bespoke Order'}
               </div>
             </div>

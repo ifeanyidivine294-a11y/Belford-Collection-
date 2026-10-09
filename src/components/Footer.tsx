@@ -1,7 +1,7 @@
 import React from 'react';
 import { PageType, PlaceholderConfig } from '../types';
 import { resolveImageUrl } from '../utils/imageHelper';
-import { Settings, CreditCard } from 'lucide-react';
+import { Phone, Mail, MapPin, Settings } from 'lucide-react';
 
 interface FooterProps {
   onNavigate: (page: PageType) => void;
@@ -19,21 +19,22 @@ export const Footer: React.FC<FooterProps> = ({
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Section 41: NEW logo only: https://postimg.cc/cgjQzM37
   const resolvedLogo = resolveImageUrl(placeholders.LOGO_URL);
 
   return (
     <footer className="bg-[#071A3D] text-white border-t border-[#C9D2E3]/20 pt-16 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12 mb-14">
-          {/* Col 1: Logo & Official Brand Information (Section 44) */}
+          {/* Col 1: Logo & Brand Description per Section 41 */}
           <div className="space-y-4">
             <div className="flex items-center">
               {resolvedLogo ? (
                 <div className="h-12 flex items-center">
                   <img
                     src={resolvedLogo}
-                    alt={placeholders.BUSINESS_NAME}
-                    className="h-10 sm:h-11 w-auto max-w-[200px] object-contain rounded-sm filter brightness-105"
+                    alt="Belford Collection"
+                    className="h-11 sm:h-12 w-auto max-w-[210px] object-contain filter brightness-105"
                     referrerPolicy="no-referrer"
                   />
                 </div>
@@ -50,18 +51,29 @@ export const Footer: React.FC<FooterProps> = ({
             </div>
 
             <p className="text-[#C9D2E3] text-xs leading-relaxed max-w-sm font-light">
-              Premium fashion boutique in Agbor, Delta State offering refined clothing, native and English wear, footwear, accessories, beauty and custom tailoring.
+              Premium Nigerian fashion house of 18+ years crafting bespoke tailoring, contemporary English wear, African native attire, handcrafted footwear, accessories and luxury beauty.
             </p>
 
-            <div className="pt-2 text-xs text-[#C9D2E3] space-y-1">
-              <p className="text-white font-medium">{placeholders.ADDRESS}</p>
-              <p>Phone: {placeholders.PHONE_NUMBER}</p>
-              <p>WhatsApp: {placeholders.WHATSAPP_NUMBER}</p>
-              <p>Email: {placeholders.EMAIL_ADDRESS}</p>
+            {/* Contact Information per Section 3 & 41 */}
+            <div className="pt-2 text-xs text-[#C9D2E3] space-y-2">
+              <div className="flex items-center gap-2">
+                <MapPin className="w-3.5 h-3.5 text-[#2563FF] shrink-0" />
+                <span>{placeholders.LOCATION}, Nigeria</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Phone className="w-3.5 h-3.5 text-[#2563FF] shrink-0" />
+                <span>{placeholders.PHONE_NUMBER} / {placeholders.INTERNATIONAL_PHONE}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Mail className="w-3.5 h-3.5 text-[#2563FF] shrink-0" />
+                <a href={`mailto:${placeholders.EMAIL_ADDRESS}`} className="hover:text-white transition-colors">
+                  {placeholders.EMAIL_ADDRESS}
+                </a>
+              </div>
             </div>
           </div>
 
-          {/* Col 2: Quick Links (Section 44) */}
+          {/* Col 2: Quick Links per Section 41 */}
           <div className="space-y-4">
             <h3 className="text-xs uppercase tracking-[0.25em] font-semibold text-white/90">
               Quick Links
@@ -98,11 +110,6 @@ export const Footer: React.FC<FooterProps> = ({
                 </button>
               </li>
               <li>
-                <button onClick={() => handleLink('group-orders')} className="hover:text-white hover:underline transition-colors">
-                  Group Orders
-                </button>
-              </li>
-              <li>
                 <button onClick={() => handleLink('about')} className="hover:text-white hover:underline transition-colors">
                   About
                 </button>
@@ -115,10 +122,10 @@ export const Footer: React.FC<FooterProps> = ({
             </ul>
           </div>
 
-          {/* Col 3: Customer & Payment (Section 44) */}
+          {/* Col 3: Customer Links per Section 41 */}
           <div className="space-y-4">
             <h3 className="text-xs uppercase tracking-[0.25em] font-semibold text-white/90">
-              Customer Care
+              Customer Services
             </h3>
             <ul className="space-y-2 text-xs text-[#C9D2E3]">
               <li>
@@ -127,8 +134,13 @@ export const Footer: React.FC<FooterProps> = ({
                 </button>
               </li>
               <li>
+                <button onClick={() => handleLink('group-orders')} className="hover:text-white hover:underline transition-colors">
+                  Group Orders / Aso-Ebi
+                </button>
+              </li>
+              <li>
                 <button onClick={() => handleLink('exchange-return')} className="hover:text-white hover:underline transition-colors">
-                  Exchanges
+                  Exchange / Return
                 </button>
               </li>
               <li>
@@ -137,44 +149,44 @@ export const Footer: React.FC<FooterProps> = ({
                 </button>
               </li>
             </ul>
-
-            <div className="pt-3 border-t border-white/10 space-y-2">
-              <span className="text-[11px] uppercase tracking-wider font-semibold text-white/90 flex items-center gap-1.5">
-                <CreditCard className="w-3.5 h-3.5 text-[#2563FF]" />
-                <span>Payment Account</span>
-              </span>
-              <div className="text-[11px] text-[#C9D2E3]/80 space-y-0.5 font-mono">
-                <p>{placeholders.PALMPAY_PLATFORM}: {placeholders.PALMPAY_NUMBER}</p>
-                <p>Name: {placeholders.PALMPAY_NAME}</p>
-                <p className="font-sans text-[10px] text-[#C9D2E3]/60 pt-0.5">{placeholders.PAYMENT_DETAILS}</p>
-              </div>
-            </div>
           </div>
 
-          {/* Col 4: Social & Placeholders (Section 44) */}
+          {/* Col 4: Social Links & Placeholders per Section 3 & 41 */}
           <div className="space-y-4">
             <h3 className="text-xs uppercase tracking-[0.25em] font-semibold text-white/90">
-              Connect
+              Connect With Us
             </h3>
-            <div className="space-y-2 text-xs text-[#C9D2E3]">
-              {placeholders.FACEBOOK_URL && (
-                <p>
-                  <a
-                    href={placeholders.FACEBOOK_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-[#2563FF] transition-colors"
-                  >
-                    Facebook: Belford Collection
+            <div className="space-y-2.5 text-xs text-[#C9D2E3]">
+              <p>
+                <a
+                  href={placeholders.FACEBOOK_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[#2563FF] transition-colors"
+                >
+                  Facebook: Belford Collection
+                </a>
+              </p>
+              <p>
+                <span className="text-white/60">Instagram:</span>{' '}
+                {placeholders.INSTAGRAM_URL.startsWith('http') ? (
+                  <a href={placeholders.INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="hover:text-[#2563FF]">
+                    @belfordcollection
                   </a>
-                </p>
-              )}
-              {placeholders.INSTAGRAM_URL && !placeholders.INSTAGRAM_URL.startsWith('[') && (
-                <p>Instagram: {placeholders.INSTAGRAM_URL}</p>
-              )}
-              {placeholders.TIKTOK_URL && !placeholders.TIKTOK_URL.startsWith('[') && (
-                <p>TikTok: {placeholders.TIKTOK_URL}</p>
-              )}
+                ) : (
+                  <span>{placeholders.INSTAGRAM_URL}</span>
+                )}
+              </p>
+              <p>
+                <span className="text-white/60">TikTok:</span>{' '}
+                {placeholders.TIKTOK_URL.startsWith('http') ? (
+                  <a href={placeholders.TIKTOK_URL} target="_blank" rel="noopener noreferrer" className="hover:text-[#2563FF]">
+                    @belfordcollection
+                  </a>
+                ) : (
+                  <span>{placeholders.TIKTOK_URL}</span>
+                )}
+              </p>
             </div>
 
             <div className="pt-4 border-t border-white/10">
@@ -190,12 +202,14 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
         </div>
 
-        {/* Bottom Bar: Copyright per Section 44 */}
+        {/* Bottom Bar: Exact Copyright per Section 41 */}
         <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-xs text-[#C9D2E3] gap-4">
-          <p>
+          <p className="font-medium text-white">
             © Belford Collection. All Rights Reserved.
           </p>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 text-xs text-[#C9D2E3]/80">
+            <span>Abadeta State, Nigeria</span>
+            <span aria-hidden="true" className="text-white/20">·</span>
             <button
               onClick={() => handleLink('exchange-return')}
               className="hover:text-white transition-colors"
@@ -203,7 +217,7 @@ export const Footer: React.FC<FooterProps> = ({
               Exchange Policy
             </button>
             <span aria-hidden="true" className="text-white/20">·</span>
-            <span>Delivery and pickup available. Details confirmed on WhatsApp.</span>
+            <span>Delivery & Pickup Available</span>
           </div>
         </div>
       </div>

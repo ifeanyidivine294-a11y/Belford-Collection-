@@ -2,7 +2,7 @@ import { Product } from '../types';
 import { IMAGE_CONFIG, PRICE_CONFIG } from '../config/images';
 
 export const PRODUCTS: Product[] = [
-  // 4 FEATURED PRODUCTS (Section 9)
+  // 4 FEATURED PRODUCTS (Section 11)
   {
     id: 'feat-01',
     code: 'BC-ANK-MAXI',
@@ -10,12 +10,12 @@ export const PRODUCTS: Product[] = [
     department: 'women',
     category: 'Native Wear',
     subCategory: 'Ankara',
-    price: 38000,
-    priceDisplay: PRICE_CONFIG['Ankara Maxi Gown'] || '₦38,000',
+    price: 25000,
+    priceDisplay: '₦25,000',
     isEstimate: true,
     image: IMAGE_CONFIG.ankaraMaxiGown,
     description: 'A flowing statement gown designed for elegant occasions.',
-    availableSizes: ['S', 'M', 'L', 'XL', 'XXL', 'Custom Fit'],
+    availableSizes: ['S', 'M', 'L', 'XL', 'XXL', 'Custom Measurement'],
     availableColors: ['Royal Print Pattern', 'Vibrant Cobalt & Ochre'],
     inStock: true,
     featured: true
@@ -27,12 +27,12 @@ export const PRODUCTS: Product[] = [
     department: 'men',
     category: 'English Wear',
     subCategory: 'Suits',
-    price: 95000,
-    priceDisplay: PRICE_CONFIG["Men's Premium Suit"] || '₦95,000',
+    price: 45000,
+    priceDisplay: '₦45,000',
     isEstimate: true,
     image: IMAGE_CONFIG.mensPremiumSuit,
     description: 'A polished tailored suit for business and formal occasions.',
-    availableSizes: ['38R', '40R', '42R', '44R', '46L', 'Bespoke Sizing'],
+    availableSizes: ['38R', '40R', '42R', '44R', '46L', 'Custom Measurement'],
     availableColors: ['Midnight Navy', 'Electric Cobalt Blue', 'Charcoal Slate'],
     inStock: true,
     featured: true
@@ -44,8 +44,8 @@ export const PRODUCTS: Product[] = [
     department: 'footwear-accessories',
     category: 'Footwear',
     subCategory: 'Block Heels',
-    price: 35000,
-    priceDisplay: PRICE_CONFIG["Women's Block Heels"] || '₦35,000',
+    price: 0,
+    priceDisplay: 'PRICE AVAILABLE ON REQUEST',
     isEstimate: true,
     image: IMAGE_CONFIG.womensBlockHeels,
     description: 'Comfortable statement heels for polished everyday elegance.',
@@ -61,8 +61,8 @@ export const PRODUCTS: Product[] = [
     department: 'footwear-accessories',
     category: 'Accessories',
     subCategory: 'Bags',
-    price: 45000,
-    priceDisplay: PRICE_CONFIG['Premium Handbag'] || '₦45,000',
+    price: 32000,
+    priceDisplay: '₦32,000',
     isEstimate: true,
     image: IMAGE_CONFIG.premiumHandbag,
     description: 'A refined handbag designed to finish your look.',
@@ -72,7 +72,7 @@ export const PRODUCTS: Product[] = [
     featured: true
   },
 
-  // MEN'S ENGLISH WEAR (Section 15)
+  // MEN'S ENGLISH WEAR (Section 27)
   {
     id: 'men-eng-01',
     code: 'BC-MEN-ENG-SUIT',
@@ -85,7 +85,7 @@ export const PRODUCTS: Product[] = [
     isEstimate: true,
     image: IMAGE_CONFIG.mensSuits,
     description: 'Tailored formalwear for confident professional presence.',
-    availableSizes: ['38R', '40R', '42R', '44R', '46R'],
+    availableSizes: ['38R', '40R', '42R', '44R', '46R', 'Custom Measurement'],
     availableColors: ['Deep Navy', 'Charcoal', 'Midnight Blue'],
     inStock: true
   },
@@ -101,7 +101,7 @@ export const PRODUCTS: Product[] = [
     isEstimate: true,
     image: IMAGE_CONFIG.mensTwoPiece,
     description: 'Versatile tailoring for business and formal occasions.',
-    availableSizes: ['38R', '40R', '42R', '44R', '46R'],
+    availableSizes: ['38R', '40R', '42R', '44R', '46R', 'Custom Measurement'],
     availableColors: ['Steel Navy', 'Classic Black', 'Cool Slate'],
     inStock: true
   },
@@ -117,7 +117,7 @@ export const PRODUCTS: Product[] = [
     isEstimate: true,
     image: IMAGE_CONFIG.mensThreePiece,
     description: 'Classic three-piece tailoring with distinguished appeal.',
-    availableSizes: ['38R', '40R', '42R', '44R', '46L'],
+    availableSizes: ['38R', '40R', '42R', '44R', '46L', 'Custom Measurement'],
     availableColors: ['Royal Navy', 'Graphite Check', 'Ice Blue Accent'],
     inStock: true
   },
@@ -165,7 +165,7 @@ export const PRODUCTS: Product[] = [
     isEstimate: true,
     image: IMAGE_CONFIG.mensTrousers,
     description: 'Clean-cut trousers for modern wardrobes.',
-    availableSizes: ['30', '32', '34', '36', '38', '40'],
+    availableSizes: ['30', '32', '34', '36', '38', '40', 'Custom Measurement'],
     availableColors: ['Navy Blue', 'Charcoal Grey', 'Stone Silver'],
     inStock: true
   },
@@ -181,7 +181,7 @@ export const PRODUCTS: Product[] = [
     isEstimate: true,
     image: IMAGE_CONFIG.mensBlazers,
     description: 'Structured blazers for polished professional style.',
-    availableSizes: ['38R', '40R', '42R', '44R'],
+    availableSizes: ['38R', '40R', '42R', '44R', 'Custom Measurement'],
     availableColors: ['Deep Cobalt', 'Midnight Navy', 'Windowpane Check'],
     inStock: true
   },
@@ -213,12 +213,12 @@ export const PRODUCTS: Product[] = [
     isEstimate: true,
     image: IMAGE_CONFIG.mensCorporate,
     description: 'Professional styles designed for confident working days.',
-    availableSizes: ['38', '40', '42', '44', '46'],
+    availableSizes: ['38', '40', '42', '44', '46', 'Custom Measurement'],
     availableColors: ['Executive Blue', 'Dark Charcoal', 'Oxford White'],
     inStock: true
   },
 
-  // MEN'S NATIVE WEAR (Section 16)
+  // MEN'S NATIVE WEAR (Section 28)
   {
     id: 'men-nat-01',
     code: 'BC-MEN-NAT-SEN',
@@ -231,7 +231,7 @@ export const PRODUCTS: Product[] = [
     isEstimate: true,
     image: IMAGE_CONFIG.senator,
     description: 'Refined native tailoring for important occasions.',
-    availableSizes: ['M', 'L', 'XL', 'XXL', 'Bespoke Fit'],
+    availableSizes: ['M', 'L', 'XL', 'XXL', 'Custom Measurement'],
     availableColors: ['Navy & Cobalt Embroidery', 'Ice Blue', 'Deep Indigo'],
     inStock: true
   },
@@ -247,7 +247,7 @@ export const PRODUCTS: Product[] = [
     isEstimate: true,
     image: IMAGE_CONFIG.agbada,
     description: 'Distinguished traditional silhouettes with commanding presence.',
-    availableSizes: ['M', 'L', 'XL', 'Grand Boubou Size'],
+    availableSizes: ['M', 'L', 'XL', 'Grand Boubou', 'Custom Measurement'],
     availableColors: ['Royal Navy Blue', 'Ice Silver Brocade', 'Rich Cobalt'],
     inStock: true
   },
@@ -263,7 +263,7 @@ export const PRODUCTS: Product[] = [
     isEstimate: true,
     image: IMAGE_CONFIG.nativeTwoPiece,
     description: 'Modern native separates for effortless sophistication.',
-    availableSizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    availableSizes: ['S', 'M', 'L', 'XL', 'XXL', 'Custom Measurement'],
     availableColors: ['Monochrome Navy', 'Cobalt Piping', 'Cool Slate'],
     inStock: true
   },
@@ -279,7 +279,7 @@ export const PRODUCTS: Product[] = [
     isEstimate: true,
     image: IMAGE_CONFIG.kaftan,
     description: 'Relaxed elegance with a refined native finish.',
-    availableSizes: ['M', 'L', 'XL', 'XXL'],
+    availableSizes: ['M', 'L', 'XL', 'XXL', 'Custom Measurement'],
     availableColors: ['Navy Blue', 'Off-White', 'Sky Ice Blue'],
     inStock: true
   },
@@ -295,7 +295,7 @@ export const PRODUCTS: Product[] = [
     isEstimate: true,
     image: IMAGE_CONFIG.nativeShirts,
     description: 'Distinctive shirts for modern traditional dressing.',
-    availableSizes: ['S', 'M', 'L', 'XL'],
+    availableSizes: ['S', 'M', 'L', 'XL', 'Custom Measurement'],
     availableColors: ['Embroidered White', 'Cobalt Chest Detail', 'Navy Wool'],
     inStock: true
   },
@@ -305,18 +305,18 @@ export const PRODUCTS: Product[] = [
     name: 'Traditional Outfits',
     department: 'men',
     category: 'Native Wear',
-    subCategory: 'Traditional',
+    subCategory: 'Traditional Outfits',
     price: 75000,
     priceDisplay: PRICE_CONFIG['Traditional Outfits'] || '₦75,000',
     isEstimate: true,
     image: IMAGE_CONFIG.traditional,
     description: 'Occasion-ready styles celebrating Nigerian craftsmanship.',
-    availableSizes: ['M', 'L', 'XL', 'XXL', 'Bespoke Fit'],
+    availableSizes: ['M', 'L', 'XL', 'XXL', 'Custom Measurement'],
     availableColors: ['Ceremonial Navy', 'Handwoven George Weave', 'Cobalt Stripe'],
     inStock: true
   },
 
-  // WOMEN'S ENGLISH WEAR (Section 13)
+  // WOMEN'S ENGLISH WEAR (Section 29)
   {
     id: 'women-eng-01',
     code: 'BC-WOM-ENG-DRESS',
@@ -329,7 +329,7 @@ export const PRODUCTS: Product[] = [
     isEstimate: true,
     image: IMAGE_CONFIG.dresses,
     description: 'Elegant everyday and occasion dresses with polished silhouettes.',
-    availableSizes: ['UK 8', 'UK 10', 'UK 12', 'UK 14', 'UK 16'],
+    availableSizes: ['UK 8', 'UK 10', 'UK 12', 'UK 14', 'UK 16', 'Custom Measurement'],
     availableColors: ['Midnight Navy', 'Electric Cobalt', 'Ivory'],
     inStock: true
   },
@@ -345,7 +345,7 @@ export const PRODUCTS: Product[] = [
     isEstimate: true,
     image: IMAGE_CONFIG.gowns,
     description: 'Refined gowns created for memorable occasions.',
-    availableSizes: ['UK 8', 'UK 10', 'UK 12', 'UK 14', 'UK 16', 'Bespoke Fit'],
+    availableSizes: ['UK 8', 'UK 10', 'UK 12', 'UK 14', 'UK 16', 'Custom Measurement'],
     availableColors: ['Sapphire Blue', 'Deep Navy Elegance', 'Silver Tint'],
     inStock: true
   },
@@ -393,7 +393,7 @@ export const PRODUCTS: Product[] = [
     isEstimate: true,
     image: IMAGE_CONFIG.jumpsuits,
     description: 'Statement one-piece looks with effortless sophistication.',
-    availableSizes: ['UK 8', 'UK 10', 'UK 12', 'UK 14'],
+    availableSizes: ['UK 8', 'UK 10', 'UK 12', 'UK 14', 'Custom Measurement'],
     availableColors: ['Cobalt Royal', 'Midnight Navy', 'Champagne Silver'],
     inStock: true
   },
@@ -431,18 +431,18 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'women-eng-08',
-    code: 'BC-WOM-ENG-JEAN-TROUSER',
-    name: 'Jean Trouser',
+    code: 'BC-WOM-ENG-TROUSER',
+    name: 'Jean Trousers',
     department: 'women',
     category: 'English Wear',
-    subCategory: 'Jean Trouser',
+    subCategory: 'Jean Trousers',
     price: 25000,
-    priceDisplay: PRICE_CONFIG['Jean Trouser'] || '₦25,000',
+    priceDisplay: PRICE_CONFIG['Jean Trousers'] || PRICE_CONFIG["Women's Trousers"] || '₦25,000',
     isEstimate: true,
-    image: IMAGE_CONFIG.womensJeanTrouser, // Updated to sGfGYjgM per Instruction 6
-    description: 'Clean-cut contemporary jean trousers tailored for relaxed elegance and flattering silhouette.',
+    image: IMAGE_CONFIG.womensTrousers, // Women's Jean Trousers: https://postimg.cc/06BdJrm8
+    description: 'Clean-cut denim jean trousers tailored for versatile modern dressing and full-body silhouette.',
     availableSizes: ['UK 8', 'UK 10', 'UK 12', 'UK 14', 'UK 16'],
-    availableColors: ['Classic Indigo', 'Deep Cobalt Blue', 'Light Denim Wash'],
+    availableColors: ['High-Waist Navy', 'Cobalt Wide-Leg', 'Ivory White'],
     inStock: true
   },
   {
@@ -455,8 +455,8 @@ export const PRODUCTS: Product[] = [
     price: 45000,
     priceDisplay: PRICE_CONFIG['Corporate Wear'] || '₦45,000',
     isEstimate: true,
-    image: IMAGE_CONFIG.corporateWear, // Updated to N2G26sjL per Instruction 5
-    description: 'Polished wardrobe pieces designed for executive and professional settings.',
+    image: IMAGE_CONFIG.corporateWear, // Corporate Wear: https://postimg.cc/LYQnpXwT
+    description: 'Polished wardrobe pieces designed for professional settings.',
     availableSizes: ['UK 8', 'UK 10', 'UK 12', 'UK 14', 'UK 16'],
     availableColors: ['Executive Blue', 'Tailored Navy', 'Pearl White'],
     inStock: true
@@ -471,14 +471,14 @@ export const PRODUCTS: Product[] = [
     price: 45000,
     priceDisplay: PRICE_CONFIG['Party Wear'] || '₦45,000',
     isEstimate: true,
-    image: IMAGE_CONFIG.womensPartyWear, // Moved old trouser image xNkqTQVR here per Section 49
+    image: IMAGE_CONFIG.partyWear, // Women's Party Wear per Instruction 2: https://postimg.cc/xNkqTQVR
     description: 'Statement looks created for celebrations and memorable evenings.',
     availableSizes: ['UK 8', 'UK 10', 'UK 12', 'UK 14'],
     availableColors: ['Glimmering Cobalt', 'Midnight Sequin', 'Liquid Silver'],
     inStock: true
   },
 
-  // WOMEN'S NATIVE / OCCASION WEAR (Section 14)
+  // WOMEN'S NATIVE / AFRICAN WEAR (Section 30)
   {
     id: 'women-nat-01',
     code: 'BC-WOM-NAT-ANK',
@@ -491,7 +491,7 @@ export const PRODUCTS: Product[] = [
     isEstimate: true,
     image: IMAGE_CONFIG.womensAnkara,
     description: 'Vibrant contemporary looks with distinctive Nigerian character.',
-    availableSizes: ['UK 8', 'UK 10', 'UK 12', 'UK 14', 'UK 16', 'Custom Fit'],
+    availableSizes: ['UK 8', 'UK 10', 'UK 12', 'UK 14', 'UK 16', 'Custom Measurement'],
     availableColors: ['Traditional Blue Print', 'Geometric Ochre & Cobalt'],
     inStock: true
   },
@@ -507,7 +507,7 @@ export const PRODUCTS: Product[] = [
     isEstimate: true,
     image: IMAGE_CONFIG.lace,
     description: 'Elegant lace styles for sophisticated occasions.',
-    availableSizes: ['UK 8', 'UK 10', 'UK 12', 'UK 14', 'UK 16', 'Bespoke Fit'],
+    availableSizes: ['UK 8', 'UK 10', 'UK 12', 'UK 14', 'UK 16', 'Custom Measurement'],
     availableColors: ['French Cord Navy', 'Cobalt Dry Lace', 'Silver Shimmer'],
     inStock: true
   },
@@ -523,7 +523,7 @@ export const PRODUCTS: Product[] = [
     isEstimate: true,
     image: IMAGE_CONFIG.george,
     description: 'Refined occasion styling with timeless presence.',
-    availableSizes: ['Custom Fit', 'Standard Occasion Size'],
+    availableSizes: ['Custom Measurement', 'Standard Occasion Size'],
     availableColors: ['Imperial Blue & Gold Trim', 'Navy Intricate Border'],
     inStock: true
   },
@@ -592,7 +592,7 @@ export const PRODUCTS: Product[] = [
     inStock: true
   },
 
-  // FOOTWEAR (Section 17)
+  // FOOTWEAR (Section 31)
   {
     id: 'foot-01',
     code: 'BC-SHOE-HEELS',
@@ -738,7 +738,7 @@ export const PRODUCTS: Product[] = [
     inStock: true
   },
 
-  // ACCESSORIES (Section 18)
+  // ACCESSORIES (Section 32)
   {
     id: 'acc-01',
     code: 'BC-ACC-BAGS',
@@ -845,7 +845,7 @@ export const PRODUCTS: Product[] = [
     price: 40000,
     priceDisplay: PRICE_CONFIG['Jewellery Sets'] || '₦40,000',
     isEstimate: true,
-    image: IMAGE_CONFIG.jewellerySets,
+    image: IMAGE_CONFIG.jewellerySets, // Exactly preserved URL
     description: 'Coordinated jewellery for complete occasion styling.',
     availableSizes: ['Complete Ensemble Set'],
     availableColors: ['Silver Radiance', 'Deep Sapphire Harmony'],
@@ -900,7 +900,7 @@ export const PRODUCTS: Product[] = [
     inStock: true
   },
 
-  // BEAUTY & MAKEUP (Section 19)
+  // BEAUTY & MAKEUP (Section 33)
   {
     id: 'bty-01',
     code: 'BC-BTY-MKUP',
@@ -975,7 +975,7 @@ export const PRODUCTS: Product[] = [
     price: 10000,
     priceDisplay: PRICE_CONFIG['Eyelashes'] || '₦10,000',
     isEstimate: true,
-    image: IMAGE_CONFIG.eyelashes,
+    image: IMAGE_CONFIG.eyelashes, // Exactly preserved URL
     description: 'Elegant lashes for defined eye looks.',
     availableSizes: ['Multi-Pack (3 Pairs)'],
     availableColors: ['Natural Wispy', 'Occasion Glam Volume'],

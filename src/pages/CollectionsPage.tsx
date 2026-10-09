@@ -128,21 +128,20 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
           </p>
         </div>
 
-        {/* 6 Major Collection Cards (Section 23) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-20">
+        {/* 6 Major Collection Cards: full width edge-to-edge images, no padding, no background bars, top aligned */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-20 items-start">
           {majorCollections.map((col) => (
             <div
               key={col.title}
               onClick={() => onNavigate(col.page)}
               className="group cursor-pointer bg-white border border-[#C9D2E3]/60 rounded-sm overflow-hidden flex flex-col justify-between hover:shadow-xl hover:border-[#2563FF]/50 transition-all duration-300"
             >
-              {/* Full-Body Visual Area with exact supplied image (Instruction 1 & 9) */}
-              <div className="relative aspect-[3/4] sm:aspect-[4/5] overflow-hidden bg-[#F8FAFC] flex items-center justify-center p-3 border-b border-[#C9D2E3]/30">
+              {/* Edge-to-edge flush image */}
+              <div className="relative w-full block overflow-hidden">
                 <BelfordImage
                   src={col.image}
                   alt={col.title}
-                  objectFit="contain"
-                  className="w-full h-full object-contain object-center group-hover:scale-[1.02] transition-transform duration-500"
+                  className="w-full h-auto block"
                   allowZoom={true}
                   onZoom={onOpenLightbox}
                 />
@@ -277,23 +276,22 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
           </p>
         </div>
 
-        {/* Filtered Products Grid with Full-Body Model Display (Instruction 1 & 9) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {/* Filtered Products Grid: full width edge-to-edge images, no padding, no background bars, top aligned */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 items-start">
           {filteredProducts.map((product) => (
             <div
               key={product.id}
               className="bg-white border border-[#C9D2E3]/60 rounded-sm flex flex-col group transition-all duration-300 hover:border-[#2563FF]/50 hover:shadow-xl overflow-hidden"
             >
-              {/* Full-Body Container */}
+              {/* Edge-to-edge flush image */}
               <div
                 onClick={() => onSelectProduct(product)}
-                className="cursor-pointer relative aspect-[3/4] sm:aspect-[4/5] bg-[#F8FAFC] flex items-center justify-center p-3 border-b border-[#C9D2E3]/30 overflow-hidden"
+                className="cursor-pointer relative w-full block overflow-hidden"
               >
                 <BelfordImage
                   src={product.image}
                   alt={product.name}
-                  objectFit="contain"
-                  className="w-full h-full object-contain object-center group-hover:scale-[1.02] transition-transform duration-300"
+                  className="w-full h-auto block"
                   allowZoom={true}
                   onZoom={onOpenLightbox}
                 />

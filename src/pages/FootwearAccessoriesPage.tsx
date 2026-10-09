@@ -63,14 +63,6 @@ export const FootwearAccessoriesPage: React.FC<FootwearAccessoriesPageProps> = (
     <div className="bg-[#FFFFFF] text-[#071A3D]">
       {/* Editorial Header */}
       <section className="bg-[#071A3D] text-white py-16 sm:py-24 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-25">
-          <BelfordImage
-            src={placeholders.ACCESSORIES_COLLECTION_IMAGE_URL}
-            alt="Footwear and Accessories"
-            className="w-full h-full object-cover object-center"
-            allowZoom={false}
-          />
-        </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl space-y-4">
             <span className="text-xs uppercase tracking-[0.3em] font-semibold text-[#2563FF]">
@@ -168,27 +160,26 @@ export const FootwearAccessoriesPage: React.FC<FootwearAccessoriesPageProps> = (
           ))}
         </div>
 
-        {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 pt-6">
+        {/* Products Grid: full width edge-to-edge images, no padding, no background bars, top aligned */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 pt-6 items-start">
           {filteredProducts.map((product) => (
             <div
               key={product.id}
               className="bg-white border border-[#C9D2E3]/60 rounded-sm flex flex-col group transition-all duration-300 hover:shadow-xl hover:border-[#2563FF]/50 overflow-hidden"
             >
-              {/* Product Visual with Full Display */}
+              {/* Edge-to-edge flush image */}
               <div
                 onClick={() => onSelectProduct(product)}
-                className="cursor-pointer relative aspect-[3/4] sm:aspect-[4/5] bg-[#F8FAFC] flex items-center justify-center p-3 overflow-hidden border-b border-[#C9D2E3]/30"
+                className="cursor-pointer relative w-full block overflow-hidden"
               >
                 <BelfordImage
                   src={product.image}
                   alt={product.name}
-                  objectFit="contain"
-                  className="w-full h-full object-contain object-center group-hover:scale-[1.02] transition-transform duration-300"
+                  className="w-full h-auto block"
                   allowZoom={true}
                   onZoom={onOpenLightbox}
                 />
-                <div className="absolute top-3 left-3 bg-[#071A3D] text-white text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-sm shadow-xs">
+                <div className="absolute top-3 left-3 bg-[#071A3D] text-white text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-sm shadow-xs pointer-events-none">
                   {product.subCategory}
                 </div>
               </div>

@@ -49,25 +49,26 @@ export const Header: React.FC<HeaderProps> = ({
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Section 2: NEW OFFICIAL LOGO: https://postimg.cc/cgjQzM37
   const resolvedLogo = resolveImageUrl(placeholders.LOGO_URL);
 
   return (
-    <header className="sticky top-0 z-40 bg-[#071A3D] border-b border-[#C9D2E3]/15 text-white transition-all">
+    <header className="sticky top-0 z-40 bg-[#071A3D] border-b border-[#C9D2E3]/20 text-white transition-all shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          {/* Official Logo Zone */}
+          {/* Official Logo Zone (Section 2) */}
           <div className="flex items-center gap-3">
             <button
               onClick={() => handleLinkClick('home')}
-              className="flex items-center gap-3 text-left group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563FF]"
+              className="flex items-center text-left group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563FF]"
               aria-label="Belford Collection Home"
             >
               {resolvedLogo ? (
                 <div className="h-12 flex items-center">
                   <img
                     src={resolvedLogo}
-                    alt={placeholders.BUSINESS_NAME}
-                    className="h-10 sm:h-11 w-auto max-w-[200px] object-contain rounded-sm filter brightness-105"
+                    alt="Belford Collection"
+                    className="h-11 sm:h-12 w-auto max-w-[210px] object-contain rounded-none filter brightness-105"
                     referrerPolicy="no-referrer"
                   />
                 </div>
@@ -107,10 +108,10 @@ export const Header: React.FC<HeaderProps> = ({
             })}
           </nav>
 
-          {/* Right Action Zone: Secondary CTA (WHATSAPP) + Primary CTA (ORDER NOW) */}
+          {/* Right Action Zone: Currency + Secondary CTA (WHATSAPP) + Primary CTA (ORDER NOW) */}
           <div className="flex items-center gap-2.5 sm:gap-3">
             {/* Currency selector */}
-            <div className="hidden sm:flex items-center gap-1 bg-white/5 border border-white/10 px-2.5 py-1 text-xs text-[#C9D2E3]">
+            <div className="hidden sm:flex items-center gap-1 bg-white/5 border border-white/10 px-2.5 py-1.5 text-xs text-[#C9D2E3]">
               <Globe className="w-3.5 h-3.5 text-[#2563FF]" />
               <select
                 value={currency}
@@ -125,7 +126,7 @@ export const Header: React.FC<HeaderProps> = ({
               </select>
             </div>
 
-            {/* Secondary CTA: WHATSAPP (Section 7) */}
+            {/* Secondary CTA: WHATSAPP per Section 7 */}
             <a
               href={formatWhatsAppUrl(
                 placeholders.WHATSAPP_NUMBER,
@@ -139,7 +140,7 @@ export const Header: React.FC<HeaderProps> = ({
               <span>WHATSAPP</span>
             </a>
 
-            {/* Primary CTA: ORDER NOW (Section 7) */}
+            {/* Primary CTA: ORDER NOW per Section 7 */}
             <button
               onClick={() => handleLinkClick('order')}
               className="px-5 py-2.5 bg-[#2563FF] hover:bg-[#1a51dd] text-white text-xs tracking-wider uppercase font-bold transition-all active:scale-[0.98] shadow-sm whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
@@ -159,16 +160,15 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer (Section 2 & 7) */}
       {mobileMenuOpen && (
         <div className="xl:hidden bg-[#071A3D] border-t border-white/10 px-6 pt-4 pb-8 space-y-4 animate-in fade-in slide-in-from-top-4 duration-200">
-          {/* Mobile Drawer Logo */}
           <div className="flex items-center justify-between pb-3 border-b border-white/10">
             {resolvedLogo ? (
               <img
                 src={resolvedLogo}
-                alt={placeholders.BUSINESS_NAME}
-                className="h-9 w-auto max-w-[170px] object-contain rounded-sm"
+                alt="Belford Collection"
+                className="h-10 w-auto max-w-[180px] object-contain"
                 referrerPolicy="no-referrer"
               />
             ) : (
@@ -176,8 +176,8 @@ export const Header: React.FC<HeaderProps> = ({
                 BELFORD COLLECTION
               </span>
             )}
-            <span className="text-[10px] tracking-widest text-[#2563FF] uppercase font-bold bg-[#2563FF]/10 px-2 py-0.5 border border-[#2563FF]/30 rounded">
-              AGBOR • DELTA STATE
+            <span className="text-[10px] tracking-widest text-[#2563FF] uppercase font-bold bg-[#2563FF]/10 px-2 py-0.5 border border-[#2563FF]/30">
+              {placeholders.LOCATION}
             </span>
           </div>
 
@@ -208,6 +208,12 @@ export const Header: React.FC<HeaderProps> = ({
             >
               Aso-Ebi / Group Orders
             </button>
+            <button
+              onClick={() => handleLinkClick('exchange-return')}
+              className="text-left text-sm font-semibold tracking-wider uppercase py-2 text-white/85 hover:text-white border-b border-white/5"
+            >
+              Exchange / Return
+            </button>
           </div>
 
           <div className="pt-2 flex flex-col gap-3">
@@ -221,8 +227,15 @@ export const Header: React.FC<HeaderProps> = ({
               className="w-full py-3 bg-white/10 text-white text-xs font-bold tracking-wider uppercase flex items-center justify-center gap-2 border border-white/20"
             >
               <MessageCircle className="w-4 h-4 text-[#2563FF]" />
-              <span>CHAT ON WHATSAPP</span>
+              <span>WHATSAPP CONCIERGE</span>
             </a>
+
+            <button
+              onClick={() => handleLinkClick('order')}
+              className="w-full py-3 bg-[#2563FF] text-white text-xs font-bold tracking-wider uppercase flex items-center justify-center gap-2 shadow-sm"
+            >
+              <span>ORDER NOW</span>
+            </button>
 
             <div className="flex items-center justify-between text-xs text-[#C9D2E3] pt-2">
               <span>Display Currency:</span>

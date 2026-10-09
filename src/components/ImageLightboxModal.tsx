@@ -47,11 +47,12 @@ export const ImageLightboxModal: React.FC<ImageLightboxModalProps> = ({
           <X className="w-8 h-8" />
         </button>
 
-        <div className="relative overflow-hidden max-h-[80vh] border border-[#C9D2E3]/30 bg-[#071A3D]">
+        <div className="relative w-full max-w-4xl overflow-hidden shadow-2xl">
           <img
             src={imageUrl}
             alt={title || 'Belford Collection Haute Couture Preview'}
-            className="w-auto h-auto max-w-full max-h-[80vh] object-contain mx-auto"
+            className="w-full h-auto block mx-auto"
+            style={{ width: '100%', height: 'auto', display: 'block' }}
             referrerPolicy="no-referrer"
           />
         </div>

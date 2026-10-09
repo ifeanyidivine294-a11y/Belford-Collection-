@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { PageType, PlaceholderConfig, OrderFormState } from '../types';
 import { PRODUCTS } from '../data/products';
 import { formatWhatsAppUrl } from '../config/placeholders';
-import { CheckCircle2, MessageCircle, ArrowRight, ArrowLeft, ShieldCheck, Plus, Minus, CreditCard } from 'lucide-react';
+import { CheckCircle2, MessageCircle, ArrowLeft, Plus, Minus, Send, Check } from 'lucide-react';
 
 interface OrderPageProps {
   onNavigate: (page: PageType) => void;
@@ -19,30 +19,74 @@ export const OrderPage: React.FC<OrderPageProps> = ({
     fullName: initialOrderData?.fullName || '',
     whatsappNumber: initialOrderData?.whatsappNumber || '',
     email: initialOrderData?.email || '',
-    state: initialOrderData?.state || 'Delta',
-    city: initialOrderData?.city || 'Agbor',
+    state: initialOrderData?.state || 'Abadeta State',
+    city: initialOrderData?.city || '',
     deliveryAddress: initialOrderData?.deliveryAddress || '',
     category: initialOrderData?.category || "Men's English Wear",
     productName: initialOrderData?.productName || '',
     productCode: initialOrderData?.productCode || '',
     size: initialOrderData?.size || 'M',
     shoeSize: initialOrderData?.shoeSize || '42',
-    colour: initialOrderData?.colour || 'Deep Navy',
+    colour: initialOrderData?.colour || 'Navy',
+    colourOther: initialOrderData?.colourOther || '',
     quantity: initialOrderData?.quantity || 1,
-    deliveryOption: initialOrderData?.deliveryOption || 'delivery',
-    paymentStatus: initialOrderData?.paymentStatus || 'unpaid',
-    budgetTier: initialOrderData?.budgetTier || 'Standard',
-    additionalNotes: initialOrderData?.additionalNotes || ''
+    deliveryOption: initialOrderData?.deliveryOption || 'deliver_to_me',
+    budgetTier: initialOrderData?.budgetTier || '₦15,000–₦50,000',
+    additionalNotes: initialOrderData?.additionalNotes || '',
+    customMeasurements: {
+      chest: '',
+      waist: '',
+      hip: '',
+      shoulder: '',
+      sleeveLength: '',
+      trouserLength: '',
+      neck: ''
+    }
   });
 
   const [submitted, setSubmitted] = useState(false);
 
+  // All 36 Nigerian States + FCT + Abadeta State
   const nigerianStates = [
-    'Delta', 'Edo', 'Lagos', 'Abuja (FCT)', 'Abia', 'Adamawa', 'Akwa Ibom', 'Anambra',
-    'Bauchi', 'Bayelsa', 'Benue', 'Borno', 'Cross River', 'Ebonyi', 'Ekiti', 'Enugu',
-    'Gombe', 'Imo', 'Jigawa', 'Kaduna', 'Kano', 'Katsina', 'Kebbi', 'Kogi', 'Kwara',
-    'Nasarawa', 'Niger', 'Ogun', 'Ondo', 'Osun', 'Oyo', 'Plateau', 'Rivers', 'Sokoto',
-    'Taraba', 'Yobe', 'Zamfara', 'International'
+    'Abadeta State',
+    'Abia',
+    'Adamawa',
+    'Akwa Ibom',
+    'Anambra',
+    'Bauchi',
+    'Bayelsa',
+    'Benue',
+    'Borno',
+    'Cross River',
+    'Delta',
+    'Ebonyi',
+    'Edo',
+    'Ekiti',
+    'Enugu',
+    'Federal Capital Territory (Abuja)',
+    'Gombe',
+    'Imo',
+    'Jigawa',
+    'Kaduna',
+    'Kano',
+    'Katsina',
+    'Kebbi',
+    'Kogi',
+    'Kwara',
+    'Lagos',
+    'Nasarawa',
+    'Niger',
+    'Ogun',
+    'Ondo',
+    'Osun',
+    'Oyo',
+    'Plateau',
+    'Rivers',
+    'Sokoto',
+    'Taraba',
+    'Yobe',
+    'Zamfara',
+    'International Order (UK / USA / Other)'
   ];
 
   const categories = [
@@ -53,6 +97,16 @@ export const OrderPage: React.FC<OrderPageProps> = ({
     'Footwear',
     'Accessories',
     'Beauty & Makeup'
+  ];
+
+  const standardSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'Custom Measurement'];
+  const shoeSizes = ['37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', 'Custom'];
+  const colourOptions = ['Black', 'White', 'Blue', 'Navy', 'Red', 'Green', 'Brown', 'Cream', 'Grey', 'Other'];
+  const budgetOptions: ('Below ₦5,000' | '₦5,000–₦15,000' | '₦15,000–₦50,000' | 'Above ₦50,000')[] = [
+    'Below ₦5,000',
+    '₦5,000–₦15,000',
+    '₦15,000–₦50,000',
+    'Above ₦50,000'
   ];
 
   // Map category to department in PRODUCTS
@@ -82,18 +136,16 @@ export const OrderPage: React.FC<OrderPageProps> = ({
     return PRODUCTS;
   }, [formData.category]);
 
-  const isFootwear = formData.category.toLowerCase().includes('footwear') ||
-    filteredProducts.some((p) => p.name === formData.productName && p.category === 'Footwear');
+  const isFootwear = formData.category.toLowerCase().includes('footwear');
+  const isClothing = formData.category.toLowerCase().includes('men') || formData.category.toLowerCase().includes('women');
 
-  // Sync product selection
+  // Auto-populate product if not set
   useEffect(() => {
     if (!formData.productName && filteredProducts.length > 0) {
       setFormData((prev) => ({
         ...prev,
         productName: filteredProducts[0].name,
-        productCode: filteredProducts[0].code,
-        size: filteredProducts[0].availableSizes[0] || 'Standard',
-        colour: filteredProducts[0].availableColors[0] || 'As shown'
+        productCode: filteredProducts[0].code
       }));
     }
   }, [formData.category, filteredProducts, formData.productName]);
@@ -104,9 +156,7 @@ export const OrderPage: React.FC<OrderPageProps> = ({
       setFormData((prev) => ({
         ...prev,
         productName: selected.name,
-        productCode: selected.code,
-        size: selected.availableSizes[0] || 'Standard',
-        colour: selected.availableColors[0] || 'As shown'
+        productCode: selected.code
       }));
     } else {
       setFormData((prev) => ({ ...prev, productName: prodName }));
@@ -117,36 +167,43 @@ export const OrderPage: React.FC<OrderPageProps> = ({
     return PRODUCTS.find((p) => p.name === formData.productName || p.code === formData.productCode);
   }, [formData.productName, formData.productCode]);
 
-  // Construct exact WhatsApp message per Section 27
+  // Construct structured WhatsApp order message
   const generatedWhatsAppMessage = useMemo(() => {
-    const paymentLabel = formData.paymentStatus === 'paid' ? 'PAID' : 'NOT PAID';
+    const effectiveColour = formData.colour === 'Other' ? (formData.colourOther || 'Other') : formData.colour;
+    const effectiveSize = isFootwear ? `EU ${formData.shoeSize}` : formData.size;
+
+    let measurementsText = '';
+    if (formData.size === 'Custom Measurement' && formData.customMeasurements) {
+      const m = formData.customMeasurements;
+      measurementsText = `\nCustom Measurements:
+Chest/Bust: ${m.chest || 'N/A'}, Waist: ${m.waist || 'N/A'}, Hip: ${m.hip || 'N/A'}, Shoulder: ${m.shoulder || 'N/A'}, Sleeve: ${m.sleeveLength || 'N/A'}, Trouser: ${m.trouserLength || 'N/A'}`;
+    }
+
     return `Hello Belford Collection, I would like to place an order.
 
 CUSTOMER
-Name: ${formData.fullName}
-WhatsApp: ${formData.whatsappNumber}
+Full Name: ${formData.fullName}
+WhatsApp Number: ${formData.whatsappNumber}
 Email: ${formData.email || 'N/A'}
 State: ${formData.state}
-City: ${formData.city}
-Address: ${formData.deliveryAddress || 'Store Pickup'}
+City/Town: ${formData.city || 'N/A'}
+Delivery Address: ${formData.deliveryOption === 'deliver_to_me' ? (formData.deliveryAddress || 'Address will be confirmed') : 'Pickup at Belford Flagship'}
 
-ORDER
+PRODUCT
 Category: ${formData.category}
 Product: ${formData.productName}
-Product Code: ${formData.productCode || 'N/A'}
-Size: ${formData.size || 'Standard'}
-Shoe Size: ${isFootwear ? formData.shoeSize : 'N/A'}
-Colour: ${formData.colour || 'Standard'}
+Product Code: ${formData.productCode || currentProductObj?.code || 'BC-ORDER'}
+Size: ${effectiveSize}${measurementsText}
+Colour: ${effectiveColour}
 Quantity: ${formData.quantity}
-Delivery/Pickup: ${formData.deliveryOption === 'delivery' ? 'Delivery' : 'Pickup'}
-Budget: ${formData.budgetTier || 'Standard'}
 
-PAYMENT STATUS
-${paymentLabel}
+DELIVERY & BUDGET
+Delivery Option: ${formData.deliveryOption === 'deliver_to_me' ? 'Deliver to me' : "I'll pick it up"}
+Budget: ${formData.budgetTier}
 
-NOTES
+ADDITIONAL NOTES
 ${formData.additionalNotes || 'None'}`;
-  }, [formData, isFootwear]);
+  }, [formData, isFootwear, currentProductObj]);
 
   const whatsappUrl = useMemo(() => {
     return formatWhatsAppUrl(placeholders.WHATSAPP_NUMBER, generatedWhatsAppMessage);
@@ -155,13 +212,14 @@ ${formData.additionalNotes || 'None'}`;
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
+    // Direct user to WhatsApp with the formatted order
+    window.open(whatsappUrl, '_blank');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
     <div className="bg-[#FFFFFF] text-[#071A3D] py-14 sm:py-20">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header Breadcrumb */}
         <div className="mb-8">
           <button
             onClick={() => onNavigate('collections')}
@@ -172,77 +230,54 @@ ${formData.additionalNotes || 'None'}`;
           </button>
         </div>
 
-        {/* Section 25: Order Confirmation State */}
         {submitted ? (
-          <div className="bg-[#EAF2FF]/50 border border-[#2563FF]/30 p-8 sm:p-10 space-y-7 shadow-sm">
+          <div className="bg-[#EAF2FF]/50 border border-[#2563FF]/30 p-8 sm:p-10 space-y-6 shadow-sm">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-[#2563FF] text-white flex items-center justify-center shrink-0">
-                <CheckCircle2 className="w-6 h-6" />
+              <div className="w-12 h-12 bg-[#2563FF] text-white flex items-center justify-center shrink-0">
+                <CheckCircle2 className="w-7 h-7" />
               </div>
               <div>
                 <h1 className="font-['Cinzel'] text-2xl sm:text-3xl font-bold text-[#071A3D]">
-                  ORDER REQUEST READY
+                  ORDER DISPATCHED TO WHATSAPP
                 </h1>
                 <p className="text-xs sm:text-sm text-[#071A3D]/80 mt-1">
-                  Your details have been prepared for Belford Collection. Continue to WhatsApp to complete your order enquiry.
+                  Your order details have been compiled and sent to Belford Collection's concierge.
                 </p>
               </div>
             </div>
 
-            {/* Payment Status Display per Section 25 */}
-            <div className="bg-white p-5 border border-[#C9D2E3]/60 space-y-3">
-              <div className="flex items-center justify-between pb-3 border-b border-[#C9D2E3]/30">
-                <span className="text-xs uppercase font-bold text-[#071A3D]/70 tracking-wider">
-                  Payment Status
-                </span>
-                <span className={`text-xs font-bold px-2.5 py-1 ${
-                  formData.paymentStatus === 'paid'
-                    ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                    : 'bg-amber-100 text-amber-800 border border-amber-300'
-                }`}>
-                  {formData.paymentStatus === 'paid'
-                    ? 'Customer indicated payment sent'
-                    : 'Not paid'}
-                </span>
+            <div className="bg-white p-6 border border-[#C9D2E3]/60 space-y-3 text-xs text-[#071A3D]/85">
+              <div className="flex justify-between border-b pb-2">
+                <span className="font-semibold text-gray-500">Customer:</span>
+                <span className="font-bold text-[#071A3D]">{formData.fullName} ({formData.whatsappNumber})</span>
               </div>
-
-              {/* Display payment details per Section 24 & 25 */}
-              <div className="pt-2 text-xs text-[#071A3D]/80 space-y-1.5">
-                <p className="font-bold text-[#071A3D] uppercase tracking-wider text-[11px]">
-                  Belford Collection Payment Details:
-                </p>
-                <div className="bg-[#EAF2FF]/60 p-3 rounded text-xs space-y-1 font-mono">
-                  <p><span className="text-[#071A3D]/60 font-sans">Platform:</span> {placeholders.PALMPAY_PLATFORM}</p>
-                  <p><span className="text-[#071A3D]/60 font-sans">Account/Number:</span> <span className="font-bold text-[#071A3D]">{placeholders.PALMPAY_NUMBER}</span></p>
-                  <p><span className="text-[#071A3D]/60 font-sans">Account Name:</span> {placeholders.PALMPAY_NAME}</p>
-                  <p className="text-[10px] text-[#071A3D]/60 font-sans pt-1">
-                    {placeholders.PAYMENT_DETAILS}
-                  </p>
-                </div>
+              <div className="flex justify-between border-b pb-2">
+                <span className="font-semibold text-gray-500">Item:</span>
+                <span className="font-bold text-[#071A3D]">{formData.productName} [{formData.productCode || 'BC-ORDER'}]</span>
               </div>
-
-              <div className="pt-2 text-xs text-[#071A3D]/75 space-y-1">
-                <p><strong>Item:</strong> {formData.productName} ({formData.productCode})</p>
-                <p><strong>Quantity:</strong> {formData.quantity} • <strong>Size:</strong> {isFootwear ? formData.shoeSize : formData.size}</p>
-                <p><strong>Fulfillment:</strong> {formData.deliveryOption === 'delivery' ? `Delivery to ${formData.city}, ${formData.state}` : 'Pickup at Agbor Flagship'}</p>
+              <div className="flex justify-between border-b pb-2">
+                <span className="font-semibold text-gray-500">Selection:</span>
+                <span>Size: {isFootwear ? `EU ${formData.shoeSize}` : formData.size} • Colour: {formData.colour === 'Other' ? formData.colourOther : formData.colour} • Qty: {formData.quantity}</span>
+              </div>
+              <div className="flex justify-between border-b pb-2">
+                <span className="font-semibold text-gray-500">Fulfillment:</span>
+                <span>{formData.deliveryOption === 'deliver_to_me' ? `Deliver to ${formData.city || ''}, ${formData.state}` : 'Pickup at Belford Flagship'}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-semibold text-gray-500">Budget Range:</span>
+                <span className="font-bold text-[#2563FF]">{formData.budgetTier}</span>
               </div>
             </div>
 
-            {/* Exact delivery notice per Section 23 & 37 */}
-            <p className="text-xs text-[#071A3D]/80 italic">
-              Delivery and pickup available. Details confirmed on WhatsApp.
-            </p>
-
-            {/* Continue to WhatsApp Button (Section 25) */}
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <a
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto px-8 py-4 bg-[#2563FF] hover:bg-[#1a51dd] text-white text-xs font-bold tracking-[0.2em] uppercase rounded-md transition-all duration-200 hover:-translate-y-0.5 shadow-lg shadow-[#2563FF]/30 flex items-center justify-center gap-2.5 min-h-[48px]"
+                className="w-full sm:w-auto px-8 py-4 bg-[#2563FF] hover:bg-[#1a51dd] text-white text-xs font-bold tracking-[0.2em] uppercase transition-all duration-200 hover:-translate-y-0.5 shadow-lg shadow-[#2563FF]/30 flex items-center justify-center gap-2.5 min-h-[48px]"
               >
                 <MessageCircle className="w-4 h-4" />
-                <span>CONTINUE TO WHATSAPP</span>
+                <span>RE-OPEN WHATSAPP CHAT</span>
               </a>
 
               <button
@@ -255,25 +290,23 @@ ${formData.additionalNotes || 'None'}`;
             </div>
           </div>
         ) : (
-          /* Form Content */
           <form onSubmit={handleSubmit} className="space-y-10">
-            {/* Title & Intro */}
             <div>
               <span className="text-xs uppercase tracking-[0.3em] font-semibold text-[#2563FF]">
-                Boutique Order Request
+                Boutique Order Portal
               </span>
               <h1 className="font-['Cinzel'] text-3xl sm:text-4xl font-bold text-[#071A3D] mt-2">
                 Place Your Order
               </h1>
               <p className="text-xs sm:text-sm text-[#071A3D]/75 mt-2 leading-relaxed">
-                Complete your details below. You will be directed to WhatsApp where size, availability, and delivery are confirmed before payment.
+                Select your specifications below. We use intuitive selectors so ordering is fast, effortless, and verified before payment.
               </p>
             </div>
 
-            {/* SECTION 1: CUSTOMER INFORMATION */}
-            <div className="bg-white border border-[#C9D2E3]/60 p-6 sm:p-8 space-y-6">
-              <h2 className="font-['Cinzel'] text-lg font-bold text-[#071A3D] border-b border-[#C9D2E3]/40 pb-3 flex items-center gap-2">
-                <span>1. Customer Information</span>
+            {/* CUSTOMER INFORMATION */}
+            <div className="bg-white border border-[#C9D2E3]/60 p-6 sm:p-8 space-y-6 shadow-xs">
+              <h2 className="font-['Cinzel'] text-lg font-bold text-[#071A3D] border-b border-[#C9D2E3]/40 pb-3">
+                1. Customer Details
               </h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -286,8 +319,8 @@ ${formData.additionalNotes || 'None'}`;
                     required
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                    placeholder="e.g. Chukwuma Obi"
-                    className="w-full px-4 py-3 bg-[#EAF2FF]/20 border border-[#C9D2E3] text-sm text-[#071A3D] focus:outline-none focus:border-[#2563FF] focus:ring-1 focus:ring-[#2563FF]"
+                    placeholder="e.g. Divine Ifeanyi"
+                    className="w-full px-4 py-3 bg-[#EAF2FF]/20 border border-[#C9D2E3] text-sm text-[#071A3D] focus:outline-none focus:border-[#2563FF]"
                   />
                 </div>
 
@@ -300,21 +333,21 @@ ${formData.additionalNotes || 'None'}`;
                     required
                     value={formData.whatsappNumber}
                     onChange={(e) => setFormData({ ...formData, whatsappNumber: e.target.value })}
-                    placeholder="e.g. 0801 234 5678"
-                    className="w-full px-4 py-3 bg-[#EAF2FF]/20 border border-[#C9D2E3] text-sm text-[#071A3D] focus:outline-none focus:border-[#2563FF] focus:ring-1 focus:ring-[#2563FF]"
+                    placeholder="e.g. 09069710687"
+                    className="w-full px-4 py-3 bg-[#EAF2FF]/20 border border-[#C9D2E3] text-sm text-[#071A3D] focus:outline-none focus:border-[#2563FF]"
                   />
                 </div>
 
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-[#071A3D] mb-1.5">
-                    Email Address
+                    Email
                   </label>
                   <input
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="e.g. client@example.com"
-                    className="w-full px-4 py-3 bg-[#EAF2FF]/20 border border-[#C9D2E3] text-sm text-[#071A3D] focus:outline-none focus:border-[#2563FF] focus:ring-1 focus:ring-[#2563FF]"
+                    className="w-full px-4 py-3 bg-[#EAF2FF]/20 border border-[#C9D2E3] text-sm text-[#071A3D] focus:outline-none focus:border-[#2563FF]"
                   />
                 </div>
 
@@ -325,7 +358,7 @@ ${formData.additionalNotes || 'None'}`;
                   <select
                     value={formData.state}
                     onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                    className="w-full px-4 py-3 bg-[#EAF2FF]/20 border border-[#C9D2E3] text-sm text-[#071A3D] focus:outline-none focus:border-[#2563FF] focus:ring-1 focus:ring-[#2563FF] cursor-pointer"
+                    className="w-full px-4 py-3 bg-[#EAF2FF]/20 border border-[#C9D2E3] text-sm text-[#071A3D] focus:outline-none focus:border-[#2563FF] cursor-pointer"
                   >
                     {nigerianStates.map((st) => (
                       <option key={st} value={st}>{st}</option>
@@ -335,15 +368,14 @@ ${formData.additionalNotes || 'None'}`;
 
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-[#071A3D] mb-1.5">
-                    City / Town <span className="text-rose-500">*</span>
+                    City / Town
                   </label>
                   <input
                     type="text"
-                    required
                     value={formData.city}
                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                    placeholder="e.g. Agbor, Asaba, Warri, Lagos"
-                    className="w-full px-4 py-3 bg-[#EAF2FF]/20 border border-[#C9D2E3] text-sm text-[#071A3D] focus:outline-none focus:border-[#2563FF] focus:ring-1 focus:ring-[#2563FF]"
+                    placeholder="e.g. Abadeta, Asaba, Lagos, Port Harcourt"
+                    className="w-full px-4 py-3 bg-[#EAF2FF]/20 border border-[#C9D2E3] text-sm text-[#071A3D] focus:outline-none focus:border-[#2563FF]"
                   />
                 </div>
 
@@ -355,15 +387,15 @@ ${formData.additionalNotes || 'None'}`;
                     type="text"
                     value={formData.deliveryAddress}
                     onChange={(e) => setFormData({ ...formData, deliveryAddress: e.target.value })}
-                    placeholder="Street, Landmark, Estate"
-                    className="w-full px-4 py-3 bg-[#EAF2FF]/20 border border-[#C9D2E3] text-sm text-[#071A3D] focus:outline-none focus:border-[#2563FF] focus:ring-1 focus:ring-[#2563FF]"
+                    placeholder="Street, Landmark, Residential estate"
+                    className="w-full px-4 py-3 bg-[#EAF2FF]/20 border border-[#C9D2E3] text-sm text-[#071A3D] focus:outline-none focus:border-[#2563FF]"
                   />
                 </div>
               </div>
             </div>
 
-            {/* SECTION 2: PRODUCT SELECTION */}
-            <div className="bg-white border border-[#C9D2E3]/60 p-6 sm:p-8 space-y-6">
+            {/* PRODUCT SPECIFICATION */}
+            <div className="bg-white border border-[#C9D2E3]/60 p-6 sm:p-8 space-y-6 shadow-xs">
               <h2 className="font-['Cinzel'] text-lg font-bold text-[#071A3D] border-b border-[#C9D2E3]/40 pb-3">
                 2. Product Selection
               </h2>
@@ -403,7 +435,7 @@ ${formData.additionalNotes || 'None'}`;
                   >
                     {filteredProducts.map((p) => (
                       <option key={p.id} value={p.name}>
-                        {p.name} {p.priceDisplay ? `(${p.priceDisplay} ESTIMATE)` : ''}
+                        {p.name} {p.priceDisplay ? `(${p.priceDisplay})` : ''}
                       </option>
                     ))}
                   </select>
@@ -416,7 +448,7 @@ ${formData.additionalNotes || 'None'}`;
                   <input
                     type="text"
                     readOnly
-                    value={formData.productCode || currentProductObj?.code || 'BC-CAT'}
+                    value={formData.productCode || currentProductObj?.code || 'BC-ITEM'}
                     className="w-full px-4 py-3 bg-gray-100 border border-[#C9D2E3] text-sm font-mono text-[#071A3D]/70 cursor-not-allowed"
                   />
                 </div>
@@ -427,67 +459,205 @@ ${formData.additionalNotes || 'None'}`;
                     <label className="block text-xs font-bold uppercase tracking-wider text-[#071A3D] mb-1.5">
                       Shoe Size <span className="text-rose-500">*</span>
                     </label>
-                    <select
-                      value={formData.shoeSize}
-                      onChange={(e) => setFormData({ ...formData, shoeSize: e.target.value })}
-                      className="w-full px-4 py-3 bg-[#EAF2FF]/20 border border-[#C9D2E3] text-sm text-[#071A3D] focus:outline-none focus:border-[#2563FF] cursor-pointer"
-                    >
-                      {['37', '38', '39', '40', '41', '42', '43', '44', '45', '46'].map((sz) => (
-                        <option key={sz} value={sz}>EU {sz}</option>
+                    <div className="grid grid-cols-4 sm:grid-cols-6 gap-1.5">
+                      {shoeSizes.map((sz) => (
+                        <button
+                          key={sz}
+                          type="button"
+                          onClick={() => setFormData({ ...formData, shoeSize: sz })}
+                          className={`py-2 text-xs font-semibold border transition-all ${
+                            formData.shoeSize === sz
+                              ? 'border-[#2563FF] bg-[#2563FF] text-white shadow-xs'
+                              : 'border-[#C9D2E3] bg-[#EAF2FF]/20 text-[#071A3D] hover:border-[#2563FF]'
+                          }`}
+                        >
+                          {sz}
+                        </button>
                       ))}
-                    </select>
+                    </div>
                   </div>
                 ) : (
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-wider text-[#071A3D] mb-1.5">
-                      Size Selection
+                      Size Selection <span className="text-rose-500">*</span>
                     </label>
-                    <select
-                      value={formData.size}
-                      onChange={(e) => setFormData({ ...formData, size: e.target.value })}
-                      className="w-full px-4 py-3 bg-[#EAF2FF]/20 border border-[#C9D2E3] text-sm text-[#071A3D] focus:outline-none focus:border-[#2563FF] cursor-pointer"
-                    >
-                      {(currentProductObj?.availableSizes || ['S', 'M', 'L', 'XL', 'XXL', 'Custom Measurement']).map((s) => (
-                        <option key={s} value={s}>{s}</option>
+                    <div className="flex flex-wrap gap-2">
+                      {standardSizes.map((sz) => (
+                        <button
+                          key={sz}
+                          type="button"
+                          onClick={() => setFormData({ ...formData, size: sz })}
+                          className={`px-3 py-2 text-xs font-semibold border transition-all ${
+                            formData.size === sz
+                              ? 'border-[#2563FF] bg-[#2563FF] text-white shadow-xs'
+                              : 'border-[#C9D2E3] bg-[#EAF2FF]/20 text-[#071A3D] hover:border-[#2563FF]'
+                          }`}
+                        >
+                          {sz}
+                        </button>
                       ))}
-                    </select>
+                    </div>
                   </div>
                 )}
 
-                <div>
+                {/* Conditional Measurement Inputs if Custom Measurement chosen */}
+                {formData.size === 'Custom Measurement' && !isFootwear && (
+                  <div className="sm:col-span-2 p-4 bg-[#EAF2FF]/40 border border-[#2563FF]/30 space-y-3">
+                    <p className="text-xs font-bold uppercase tracking-wider text-[#2563FF]">
+                      Enter Your Custom Measurements (Inches):
+                    </p>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                      <div>
+                        <label className="text-[11px] text-gray-600 block">Chest / Bust</label>
+                        <input
+                          type="text"
+                          value={formData.customMeasurements?.chest || ''}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              customMeasurements: { ...formData.customMeasurements, chest: e.target.value }
+                            })
+                          }
+                          placeholder="e.g. 40 in"
+                          className="w-full px-2.5 py-1.5 bg-white border border-[#C9D2E3] text-xs"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[11px] text-gray-600 block">Waist</label>
+                        <input
+                          type="text"
+                          value={formData.customMeasurements?.waist || ''}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              customMeasurements: { ...formData.customMeasurements, waist: e.target.value }
+                            })
+                          }
+                          placeholder="e.g. 34 in"
+                          className="w-full px-2.5 py-1.5 bg-white border border-[#C9D2E3] text-xs"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[11px] text-gray-600 block">Hips</label>
+                        <input
+                          type="text"
+                          value={formData.customMeasurements?.hip || ''}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              customMeasurements: { ...formData.customMeasurements, hip: e.target.value }
+                            })
+                          }
+                          placeholder="e.g. 42 in"
+                          className="w-full px-2.5 py-1.5 bg-white border border-[#C9D2E3] text-xs"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[11px] text-gray-600 block">Shoulder Width</label>
+                        <input
+                          type="text"
+                          value={formData.customMeasurements?.shoulder || ''}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              customMeasurements: { ...formData.customMeasurements, shoulder: e.target.value }
+                            })
+                          }
+                          placeholder="e.g. 18 in"
+                          className="w-full px-2.5 py-1.5 bg-white border border-[#C9D2E3] text-xs"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[11px] text-gray-600 block">Sleeve Length</label>
+                        <input
+                          type="text"
+                          value={formData.customMeasurements?.sleeveLength || ''}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              customMeasurements: { ...formData.customMeasurements, sleeveLength: e.target.value }
+                            })
+                          }
+                          placeholder="e.g. 25 in"
+                          className="w-full px-2.5 py-1.5 bg-white border border-[#C9D2E3] text-xs"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[11px] text-gray-600 block">Trouser / Skirt Length</label>
+                        <input
+                          type="text"
+                          value={formData.customMeasurements?.trouserLength || ''}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              customMeasurements: { ...formData.customMeasurements, trouserLength: e.target.value }
+                            })
+                          }
+                          placeholder="e.g. 41 in"
+                          className="w-full px-2.5 py-1.5 bg-white border border-[#C9D2E3] text-xs"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Colour Selection */}
+                <div className="sm:col-span-2">
                   <label className="block text-xs font-bold uppercase tracking-wider text-[#071A3D] mb-1.5">
-                    Colour / Shade
+                    Colour Selection <span className="text-rose-500">*</span>
                   </label>
-                  <select
-                    value={formData.colour}
-                    onChange={(e) => setFormData({ ...formData, colour: e.target.value })}
-                    className="w-full px-4 py-3 bg-[#EAF2FF]/20 border border-[#C9D2E3] text-sm text-[#071A3D] focus:outline-none focus:border-[#2563FF] cursor-pointer"
-                  >
-                    {(currentProductObj?.availableColors || ['Deep Navy', 'Electric Cobalt', 'White', 'As Photographed']).map((c) => (
-                      <option key={c} value={c}>{c}</option>
+                  <div className="flex flex-wrap gap-2">
+                    {colourOptions.map((c) => (
+                      <button
+                        key={c}
+                        type="button"
+                        onClick={() => setFormData({ ...formData, colour: c })}
+                        className={`px-3 py-1.5 text-xs font-semibold border transition-all ${
+                          formData.colour === c
+                            ? 'border-[#2563FF] bg-[#2563FF] text-white shadow-xs'
+                            : 'border-[#C9D2E3] bg-[#EAF2FF]/20 text-[#071A3D] hover:border-[#2563FF]'
+                        }`}
+                      >
+                        {c}
+                      </button>
                     ))}
-                  </select>
+                  </div>
+
+                  {formData.colour === 'Other' && (
+                    <div className="mt-2 max-w-sm">
+                      <input
+                        type="text"
+                        value={formData.colourOther || ''}
+                        onChange={(e) => setFormData({ ...formData, colourOther: e.target.value })}
+                        placeholder="Please specify preferred colour/pattern"
+                        className="w-full px-3 py-2 bg-white border border-[#2563FF] text-xs text-[#071A3D] focus:outline-none"
+                      />
+                    </div>
+                  )}
                 </div>
 
+                {/* Quantity with - 1 + stepper */}
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-[#071A3D] mb-1.5">
-                    Quantity
+                    Quantity <span className="text-rose-500">*</span>
                   </label>
                   <div className="flex items-center">
                     <button
                       type="button"
                       onClick={() => setFormData((p) => ({ ...p, quantity: Math.max(1, p.quantity - 1) }))}
-                      className="w-12 h-12 border border-[#C9D2E3] bg-[#EAF2FF]/30 flex items-center justify-center text-[#071A3D] hover:bg-[#EAF2FF]"
+                      className="w-12 h-12 border border-[#C9D2E3] bg-[#EAF2FF]/30 flex items-center justify-center text-[#071A3D] hover:bg-[#EAF2FF] transition-colors"
+                      aria-label="Decrease quantity"
                     >
                       <Minus className="w-4 h-4" />
                     </button>
-                    <div className="w-16 h-12 border-y border-[#C9D2E3] flex items-center justify-center text-sm font-bold">
+                    <div className="w-16 h-12 border-y border-[#C9D2E3] flex items-center justify-center text-sm font-bold bg-white tabular-nums">
                       {formData.quantity}
                     </div>
                     <button
                       type="button"
                       onClick={() => setFormData((p) => ({ ...p, quantity: p.quantity + 1 }))}
-                      className="w-12 h-12 border border-[#C9D2E3] bg-[#EAF2FF]/30 flex items-center justify-center text-[#071A3D] hover:bg-[#EAF2FF]"
+                      className="w-12 h-12 border border-[#C9D2E3] bg-[#EAF2FF]/30 flex items-center justify-center text-[#071A3D] hover:bg-[#EAF2FF] transition-colors"
+                      aria-label="Increase quantity"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -497,162 +667,103 @@ ${formData.additionalNotes || 'None'}`;
 
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-[#071A3D] mb-1.5">
-                  Additional Notes or Specific Measurements
+                  Additional Notes
                 </label>
                 <textarea
                   rows={2}
                   value={formData.additionalNotes}
                   onChange={(e) => setFormData({ ...formData, additionalNotes: e.target.value })}
-                  placeholder="Any particular fit adjustments, event deadlines, or custom details..."
+                  placeholder="Special instructions, event date, tailoring details..."
                   className="w-full px-4 py-3 bg-[#EAF2FF]/20 border border-[#C9D2E3] text-sm text-[#071A3D] focus:outline-none focus:border-[#2563FF]"
                 />
               </div>
             </div>
 
-            {/* SECTION 3: DELIVERY SELECTION */}
-            <div className="bg-white border border-[#C9D2E3]/60 p-6 sm:p-8 space-y-4">
+            {/* DELIVERY & BUDGET SELECTION */}
+            <div className="bg-white border border-[#C9D2E3]/60 p-6 sm:p-8 space-y-6 shadow-xs">
               <h2 className="font-['Cinzel'] text-lg font-bold text-[#071A3D] border-b border-[#C9D2E3]/40 pb-3">
-                3. Delivery Options
+                3. Delivery & Budget
               </h2>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, deliveryOption: 'delivery' })}
-                  className={`p-4 border text-left flex items-start justify-between transition-colors ${
-                    formData.deliveryOption === 'delivery'
-                      ? 'border-[#2563FF] bg-[#EAF2FF]/50 ring-1 ring-[#2563FF]'
-                      : 'border-[#C9D2E3] hover:border-gray-400'
-                  }`}
-                >
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-wider text-[#071A3D]">Direct Delivery</p>
-                    <p className="text-xs text-[#071A3D]/70 mt-1">Shipped securely to your specified address.</p>
-                  </div>
-                  <div className={`w-4 h-4 rounded-full border mt-0.5 flex items-center justify-center ${
-                    formData.deliveryOption === 'delivery' ? 'border-[#2563FF] bg-[#2563FF]' : 'border-gray-400'
-                  }`}>
-                    {formData.deliveryOption === 'delivery' && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
-                  </div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, deliveryOption: 'pickup' })}
-                  className={`p-4 border text-left flex items-start justify-between transition-colors ${
-                    formData.deliveryOption === 'pickup'
-                      ? 'border-[#2563FF] bg-[#EAF2FF]/50 ring-1 ring-[#2563FF]'
-                      : 'border-[#C9D2E3] hover:border-gray-400'
-                  }`}
-                >
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-wider text-[#071A3D]">Store Pickup</p>
-                    <p className="text-xs text-[#071A3D]/70 mt-1">Pickup at No. 2 Citycare Estate, Agbor.</p>
-                  </div>
-                  <div className={`w-4 h-4 rounded-full border mt-0.5 flex items-center justify-center ${
-                    formData.deliveryOption === 'pickup' ? 'border-[#2563FF] bg-[#2563FF]' : 'border-gray-400'
-                  }`}>
-                    {formData.deliveryOption === 'pickup' && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
-                  </div>
-                </button>
-              </div>
-
-              {/* Exact delivery notice per Section 23 & 37 */}
-              <div className="bg-[#EAF2FF]/40 border-l-4 border-[#2563FF] p-3 text-xs text-[#071A3D]/80">
-                <span className="font-semibold text-[#071A3D]">Delivery Policy: </span>
-                Delivery and pickup available. Details confirmed on WhatsApp.
-              </div>
-            </div>
-
-            {/* SECTION 4: PAYMENT DECLARATION (Section 24) */}
-            <div className="bg-white border border-[#C9D2E3]/60 p-6 sm:p-8 space-y-5">
-              <h2 className="font-['Cinzel'] text-lg font-bold text-[#071A3D] border-b border-[#C9D2E3]/40 pb-3 flex items-center justify-between">
-                <span>4. Payment Declaration</span>
-                <span className="text-[11px] font-sans font-normal text-[#071A3D]/60">(Optional)</span>
-              </h2>
-
-              <p className="text-xs text-[#071A3D]/70">
-                Payment is optional at this stage. You may declare whether you have sent payment or wish to confirm order details on WhatsApp first.
-              </p>
-
-              {/* Radio options per Section 24 */}
-              <div className="space-y-3">
-                <label className={`flex items-center gap-3 p-3.5 border cursor-pointer transition-colors ${
-                  formData.paymentStatus === 'unpaid'
-                    ? 'border-[#2563FF] bg-[#EAF2FF]/40 ring-1 ring-[#2563FF]'
-                    : 'border-[#C9D2E3] hover:border-gray-400'
-                }`}>
-                  <input
-                    type="radio"
-                    name="paymentDeclaration"
-                    value="unpaid"
-                    checked={formData.paymentStatus === 'unpaid'}
-                    onChange={() => setFormData({ ...formData, paymentStatus: 'unpaid' })}
-                    className="w-4 h-4 text-[#2563FF] focus:ring-0"
-                  />
-                  <div className="text-xs font-semibold text-[#071A3D]">
-                    I have not paid <span className="text-[11px] text-[#071A3D]/60 font-normal">(Confirm details & total on WhatsApp first)</span>
-                  </div>
+              <div className="space-y-4">
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#071A3D]">
+                  Delivery Option <span className="text-rose-500">*</span>
                 </label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <label
+                    onClick={() => setFormData({ ...formData, deliveryOption: 'deliver_to_me' })}
+                    className={`p-4 border cursor-pointer flex items-center justify-between transition-colors ${
+                      formData.deliveryOption === 'deliver_to_me'
+                        ? 'border-[#2563FF] bg-[#EAF2FF]/50 ring-1 ring-[#2563FF]'
+                        : 'border-[#C9D2E3] hover:border-gray-400'
+                    }`}
+                  >
+                    <div>
+                      <span className="font-bold text-xs uppercase tracking-wider text-[#071A3D] block">Deliver to me</span>
+                      <span className="text-xs text-[#071A3D]/70">Shipped directly to your doorstep in Nigeria or abroad.</span>
+                    </div>
+                    <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                      formData.deliveryOption === 'deliver_to_me' ? 'border-[#2563FF] bg-[#2563FF]' : 'border-gray-400'
+                    }`}>
+                      {formData.deliveryOption === 'deliver_to_me' && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
+                    </div>
+                  </label>
 
-                <label className={`flex items-center gap-3 p-3.5 border cursor-pointer transition-colors ${
-                  formData.paymentStatus === 'paid'
-                    ? 'border-[#2563FF] bg-[#EAF2FF]/40 ring-1 ring-[#2563FF]'
-                    : 'border-[#C9D2E3] hover:border-gray-400'
-                }`}>
-                  <input
-                    type="radio"
-                    name="paymentDeclaration"
-                    value="paid"
-                    checked={formData.paymentStatus === 'paid'}
-                    onChange={() => setFormData({ ...formData, paymentStatus: 'paid' })}
-                    className="w-4 h-4 text-[#2563FF] focus:ring-0"
-                  />
-                  <div className="text-xs font-semibold text-[#071A3D]">
-                    I have sent payment <span className="text-[11px] text-[#071A3D]/60 font-normal">(Via PalmPay transfer)</span>
-                  </div>
-                </label>
-              </div>
-
-              {/* If customer chooses "I have sent payment", show payment details per Section 24 */}
-              {formData.paymentStatus === 'paid' && (
-                <div className="p-4 bg-[#EAF2FF]/60 border border-[#2563FF]/30 space-y-2 text-xs">
-                  <div className="flex items-center gap-2 text-[#071A3D] font-bold uppercase tracking-wider text-[11px]">
-                    <CreditCard className="w-4 h-4 text-[#2563FF]" />
-                    <span>PAYMENT DETAILS</span>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 font-mono pt-1 text-[#071A3D]">
+                  <label
+                    onClick={() => setFormData({ ...formData, deliveryOption: 'pickup' })}
+                    className={`p-4 border cursor-pointer flex items-center justify-between transition-colors ${
+                      formData.deliveryOption === 'pickup'
+                        ? 'border-[#2563FF] bg-[#EAF2FF]/50 ring-1 ring-[#2563FF]'
+                        : 'border-[#C9D2E3] hover:border-gray-400'
+                    }`}
+                  >
                     <div>
-                      <span className="text-[#071A3D]/60 block font-sans text-[10px] uppercase">Platform:</span>
-                      <strong>{placeholders.PALMPAY_PLATFORM}</strong>
+                      <span className="font-bold text-xs uppercase tracking-wider text-[#071A3D] block">I'll pick it up</span>
+                      <span className="text-xs text-[#071A3D]/70">Collect at Belford Collection flagship boutique.</span>
                     </div>
-                    <div>
-                      <span className="text-[#071A3D]/60 block font-sans text-[10px] uppercase">Account/Number:</span>
-                      <strong>{placeholders.PALMPAY_NUMBER}</strong>
+                    <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                      formData.deliveryOption === 'pickup' ? 'border-[#2563FF] bg-[#2563FF]' : 'border-gray-400'
+                    }`}>
+                      {formData.deliveryOption === 'pickup' && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
                     </div>
-                    <div>
-                      <span className="text-[#071A3D]/60 block font-sans text-[10px] uppercase">Account Name:</span>
-                      <strong>{placeholders.PALMPAY_NAME}</strong>
-                    </div>
-                  </div>
-                  <p className="text-[10px] text-[#071A3D]/60 pt-1">
-                    {placeholders.PAYMENT_DETAILS}
-                  </p>
+                  </label>
                 </div>
-              )}
+              </div>
+
+              <div className="space-y-3 pt-2">
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#071A3D]">
+                  Budget Range <span className="text-rose-500">*</span>
+                </label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {budgetOptions.map((b) => (
+                    <button
+                      key={b}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, budgetTier: b })}
+                      className={`p-3 text-xs font-semibold border text-center transition-all ${
+                        formData.budgetTier === b
+                          ? 'border-[#2563FF] bg-[#2563FF] text-white shadow-xs'
+                          : 'border-[#C9D2E3] bg-[#EAF2FF]/20 text-[#071A3D] hover:border-[#2563FF]'
+                      }`}
+                    >
+                      {b}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
 
-            {/* Submit Action */}
+            {/* Submit Action: Button "SEND ORDER" per Section 25 */}
             <div className="pt-2">
               <button
                 type="submit"
-                className="w-full py-4 bg-[#2563FF] hover:bg-[#1a51dd] text-white text-xs font-bold tracking-[0.2em] uppercase rounded-md transition-all duration-200 hover:-translate-y-0.5 shadow-lg shadow-[#2563FF]/30 flex items-center justify-center gap-2 min-h-[50px]"
+                className="w-full py-4 bg-[#2563FF] hover:bg-[#1a51dd] text-white text-xs font-bold tracking-[0.2em] uppercase rounded-none transition-all duration-200 hover:-translate-y-0.5 shadow-lg shadow-[#2563FF]/30 flex items-center justify-center gap-2 min-h-[50px]"
               >
-                <span>REVIEW & CONTINUE TO WHATSAPP</span>
-                <ArrowRight className="w-4 h-4" />
+                <span>SEND ORDER</span>
+                <Send className="w-4 h-4" />
               </button>
-              <p className="text-[11px] text-[#071A3D]/60 text-center mt-3">
-                No automatic charges. Details and availability are verified directly on WhatsApp.
+              <p className="text-[11px] text-[#071A3D]/70 text-center mt-2.5">
+                Submitting opens WhatsApp with your pre-filled order for instant confirmation with our atelier team.
               </p>
             </div>
           </form>

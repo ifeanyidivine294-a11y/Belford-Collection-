@@ -7,7 +7,7 @@ interface BelfordImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   alt: string;
   className?: string;
   containerClassName?: string;
-  objectFit?: 'cover' | 'contain';
+  objectFit?: 'cover' | 'contain' | 'none';
   onZoom?: (imgUrl: string, title?: string) => void;
   allowZoom?: boolean;
 }
@@ -17,9 +17,10 @@ export const BelfordImage: React.FC<BelfordImageProps> = ({
   alt,
   className = '',
   containerClassName = '',
-  objectFit = 'contain',
+  objectFit,
   onZoom,
   allowZoom = false,
+  style,
   ...rest
 }) => {
   const [hasError, setHasError] = useState(false);
@@ -38,7 +39,8 @@ export const BelfordImage: React.FC<BelfordImageProps> = ({
   if (isPlaceholder || hasError || !resolvedSrc) {
     return (
       <div
-        className={`relative w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#071A3D] via-[#0d2757] to-[#2563FF]/30 p-6 text-center select-none ${containerClassName}`}
+        className={`relative w-full flex flex-col items-center justify-center p-8 text-center select-none bg-[#071A3D]/40 ${containerClassName}`}
+        style={{ width: '100%', height: 'auto', minHeight: '220px' }}
       >
         <div className="w-12 h-12 bg-white/10 border border-white/20 flex items-center justify-center text-white mb-2">
           <ImageIcon className="w-6 h-6 text-[#2563FF]" />
@@ -53,9 +55,18 @@ export const BelfordImage: React.FC<BelfordImageProps> = ({
     );
   }
 
+  // Strip any accidental object-cover, object-contain, or fixed height classes
+  const cleanClassName = className
+    .replace(/\bobject-cover\b/g, '')
+    .replace(/\bobject-contain\b/g, '')
+    .replace(/\bmax-h-[^\s]+\b/g, '')
+    .replace(/\bh-full\b/g, '')
+    .replace(/\bh-[^\s]+\b/g, '')
+    .trim();
+
   return (
     <div
-      className={`relative w-full h-full overflow-hidden bg-[#F8FAFC] flex items-center justify-center group/img ${containerClassName}`}
+      className={`relative w-full block overflow-hidden group/img ${containerClassName}`}
       onClick={handleClick}
     >
       <img
@@ -65,9 +76,17 @@ export const BelfordImage: React.FC<BelfordImageProps> = ({
         referrerPolicy="no-referrer"
         onLoad={() => setLoaded(true)}
         onError={() => setHasError(true)}
-        className={`w-full h-full transition-all duration-300 ease-out ${
-          objectFit === 'cover' ? 'object-cover object-center' : 'object-contain object-center'
-        } ${loaded ? 'opacity-100' : 'opacity-0 scale-95'} ${className}`}
+        style={{
+          width: '100%',
+          height: 'auto',
+          display: 'block',
+          objectFit: 'unset',
+          maxHeight: 'none',
+          ...style
+        }}
+        className={`w-full h-auto block transition-opacity duration-300 ${
+          loaded ? 'opacity-100' : 'opacity-0'
+        } ${cleanClassName}`}
         {...rest}
       />
 

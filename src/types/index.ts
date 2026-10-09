@@ -23,10 +23,10 @@ export interface Product {
   category: string; // e.g. "English Wear", "Native Wear", "Footwear", "Accessories", "Beauty"
   subCategory: string; // e.g. "Suits", "Senator", "Agbada", "Ankara", "Dresses", etc.
   price: number; // in NGN
-  priceDisplay?: string; // e.g. "₦38,000"
-  isEstimate?: boolean; // Always true per specification Section 10 & 51
+  priceDisplay?: string; // e.g. "₦25,000" or "PRICE AVAILABLE ON REQUEST"
+  isEstimate?: boolean;
   image: string; // supplied URL
-  description: string; // Maximum 12 words per Section 39 & 48
+  description: string;
   availableSizes: string[];
   availableColors: string[];
   inStock: boolean;
@@ -48,13 +48,13 @@ export interface PlaceholderConfig {
   PRODUCT_IMAGE_03: string;
   PRODUCT_IMAGE_04: string;
   BUSINESS_NAME: string;
-  BUSINESS_TYPE: string;
-  ADDRESS: string;
+  EXPERIENCE: string;
   PHONE_NUMBER: string;
   INTERNATIONAL_PHONE: string;
   WHATSAPP_NUMBER: string;
   EMAIL_ADDRESS: string;
   LOCATION: string;
+  ADDRESS: string;
   PALMPAY_NUMBER: string;
   PALMPAY_PLATFORM: string;
   PALMPAY_NAME: string;
@@ -64,11 +64,26 @@ export interface PlaceholderConfig {
   TIKTOK_URL: string;
   GOOGLE_MAPS_URL: string;
   RETURN_POLICY_URL: string;
-  ABOUT_STORY: string;
+  BUSINESS_HISTORY: string;
+  OUR_VALUES: string;
+  OUR_APPROACH: string;
+  OUR_PROMISE: string;
   CEO_NAME: string;
   CEO_TITLE: string;
   CEO_MESSAGE: string;
+  CEO_MESSAGE_PART2: string;
+  CEO_MARKETING: string;
   CEO_QUOTE: string;
+}
+
+export interface CustomMeasurements {
+  chest?: string;
+  waist?: string;
+  hip?: string;
+  shoulder?: string;
+  sleeveLength?: string;
+  trouserLength?: string;
+  neck?: string;
 }
 
 export interface OrderFormState {
@@ -84,23 +99,28 @@ export interface OrderFormState {
   size: string;
   shoeSize: string;
   colour: string;
+  colourOther?: string;
   quantity: number;
-  deliveryOption: 'delivery' | 'pickup';
-  paymentStatus: 'unpaid' | 'paid';
-  budgetTier?: string;
+  deliveryOption: 'deliver_to_me' | 'pickup';
+  budgetTier: 'Below ₦5,000' | '₦5,000–₦15,000' | '₦15,000–₦50,000' | 'Above ₦50,000';
   additionalNotes: string;
+  customMeasurements?: CustomMeasurements;
 }
 
 export interface CustomOutfitFormState {
   fullName: string;
   whatsappNumber: string;
-  gender: 'Male' | 'Female' | 'Prefer not to say';
+  gender: 'Male' | 'Female';
   outfitType: string;
+  outfitTypeOther?: string;
+  styleOption: string;
   styleDescription: string;
-  measurements: string;
+  measurementsMode: 'I have my measurements' | 'I need help with measurements' | 'I want to provide custom measurements';
+  customMeasurements?: CustomMeasurements;
   fabric: string;
+  fabricOther?: string;
   requiredDate: string;
-  budget: string;
+  budget: 'Below ₦5,000' | '₦5,000–₦15,000' | '₦15,000–₦50,000' | 'Above ₦50,000';
   additionalNotes: string;
 }
 
@@ -108,12 +128,16 @@ export interface GroupOrderFormState {
   fullName: string;
   whatsappNumber: string;
   eventType: string;
-  numberOfPeople: string;
+  eventTypeOther?: string;
+  numberOfPeople: number;
   fabric: string;
+  fabricOther?: string;
   colour: string;
+  colourOther?: string;
   style: string;
+  styleOther?: string;
   eventDate: string;
-  budget: string;
+  budget: 'Below ₦5,000' | '₦5,000–₦15,000' | '₦15,000–₦50,000' | 'Above ₦50,000';
   additionalNotes: string;
 }
 
@@ -122,6 +146,7 @@ export interface ExchangeReturnFormState {
   whatsappNumber: string;
   orderDate: string;
   product: string;
-  reason: string;
+  reason: 'Wrong Size' | 'Wrong Colour' | 'Defective Item' | 'Incorrect Item' | 'Other';
+  reasonOther?: string;
   replacementRequest: string;
 }

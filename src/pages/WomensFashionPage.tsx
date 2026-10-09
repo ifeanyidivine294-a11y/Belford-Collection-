@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { PageType, PlaceholderConfig, Product } from '../types';
 import { formatPrice, CurrencyCode } from '../utils/formatters';
 import { BelfordImage } from '../components/BelfordImage';
-import { Sparkles, Eye, ShoppingBag } from 'lucide-react';
+import { Sparkles, Eye, ShoppingBag, Scissors } from 'lucide-react';
 
 interface WomensFashionPageProps {
   onNavigate: (page: PageType) => void;
@@ -34,7 +34,7 @@ export const WomensFashionPage: React.FC<WomensFashionPageProps> = ({
     'Jumpsuits',
     'Two-Piece Sets',
     'Blazers',
-    'Jean Trouser',
+    'Jean Trousers',
     'Corporate Wear',
     'Party Wear'
   ];
@@ -107,17 +107,16 @@ export const WomensFashionPage: React.FC<WomensFashionPageProps> = ({
 
             {/* Women's Showcase Card */}
             <div className="lg:col-span-5 flex justify-center">
-              <div className="relative w-full max-w-md bg-[#F8FAFC] border-2 border-[#2563FF]/60 rounded-sm shadow-2xl overflow-hidden group">
-                <div className="relative aspect-[3/4] w-full flex items-center justify-center p-3">
+              <div className="relative w-full max-w-md bg-white border-2 border-[#2563FF]/60 rounded-sm shadow-2xl overflow-hidden group">
+                <div className="relative w-full block overflow-hidden">
                   <BelfordImage
                     src={placeholders.WOMEN_COLLECTION_IMAGE_URL}
                     alt="Women's Collection Showcase"
-                    objectFit="contain"
-                    className="w-full h-full object-contain object-center group-hover:scale-[1.02] transition-transform duration-300"
+                    className="w-full h-auto block"
                     allowZoom={true}
                     onZoom={onOpenLightbox}
                   />
-                  <div className="absolute top-4 left-4 bg-[#071A3D] text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 border border-[#2563FF]/40 rounded-sm">
+                  <div className="absolute top-4 left-4 bg-[#071A3D] text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 border border-[#2563FF]/40 rounded-sm pointer-events-none">
                     WOMEN'S COLLECTION
                   </div>
                 </div>
@@ -224,27 +223,26 @@ export const WomensFashionPage: React.FC<WomensFashionPageProps> = ({
           ))}
         </div>
 
-        {/* Products Grid with Complete Full-Body Model Visibility (Instruction 1 & 9) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 pt-6">
+        {/* Products Grid: full width edge-to-edge images, no padding, no background bars, top aligned */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 pt-6 items-start">
           {filteredProducts.map((product) => (
             <div
               key={product.id}
               className="bg-white border border-[#C9D2E3]/60 rounded-sm flex flex-col group transition-all duration-300 hover:shadow-xl hover:border-[#2563FF]/50 overflow-hidden"
             >
-              {/* Full-Body Image Container: No head, chest, waist or feet cutoff */}
+              {/* Edge-to-edge flush image: width 100%, height auto, no aspect ratio, no padding, no background bars */}
               <div
                 onClick={() => onSelectProduct(product)}
-                className="cursor-pointer relative aspect-[3/4] sm:aspect-[4/5] bg-[#F8FAFC] flex items-center justify-center p-3 overflow-hidden border-b border-[#C9D2E3]/30"
+                className="cursor-pointer relative w-full block overflow-hidden"
               >
                 <BelfordImage
                   src={product.image}
                   alt={product.name}
-                  objectFit="contain"
-                  className="w-full h-full object-contain object-center group-hover:scale-[1.02] transition-transform duration-300"
+                  className="w-full h-auto block"
                   allowZoom={true}
                   onZoom={onOpenLightbox}
                 />
-                <div className="absolute top-3 left-3 bg-[#071A3D] text-white text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-sm shadow-xs">
+                <div className="absolute top-3 left-3 bg-[#071A3D] text-white text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-sm shadow-xs pointer-events-none">
                   {product.subCategory}
                 </div>
               </div>
